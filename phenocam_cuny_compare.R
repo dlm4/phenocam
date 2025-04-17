@@ -1,11 +1,6 @@
-# test_phenopix_cuny.R
-#library(usethis)
-#use_github()
+# phenocam_cuny_compare.R
 
-# Not actually using phenopix at all in this script, will need to save as new script
-# Using phenofit instead for NDVIc comparison, GCC will need another method
-
-library(phenopix)
+#library(phenopix)
 library(lubridate)
 library(terra)
 library(sf)
@@ -14,28 +9,6 @@ library(tidyverse)
 library(exactextractr)
 library(phenofit)
 
-# structureFolder()
-# DrawMULTIROI()
-# extractVIs()
-# extractDateFilename()
-# autoFilter()
-# FitDoubleLogElmore()
-# PhenoExtract()
-
-# this is clunky and doesn't seem to work, so I'm going to do it manually
-# phenocam_polys <- DrawMULTIROI("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_source/phenocamdata_RGB_2022/cuny/2022/10/cuny_2022_10_19_115706.jpg",
-#                                "/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_source/phenocom_rois",
-#                                nroi = 1, roi.names = c("tree_1"), file.type = ".jpg")
-
-
-#data(bartlett2009)
-#fit <- FitDoubleLogElmore(bartlett2009$gcc, bartlett2009$time.stamp)
-
-# Would need to adjust polygons due to camera shifts on: 
-# April 25, 2023 after gap from April 21, it gets blurry for Feb and March before this
-# Sept 18, 2024 camera shift after Sept 17 
-
-
 img <- rast("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_source/phenocamdata_RGB_2022_0800_1600/cuny/2022/10/cuny_2022_10_19_115706.jpg")
 plot(img)
 img_flipped <- flip(img, direction = "vertical")
@@ -43,19 +16,19 @@ plot(img_flipped)
 
 # Define tree polygons
 
-# PC_Poly_ID_1, TNC_Poly_ID 298136, Fraxinus pennsylvanica - Green ash
-x1 <- 550
-x2 <- 570
-y1 <- 550
-y2 <- 570
-coords01 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)  # Define polygon coordinates
+# # PC_Poly_ID_1, TNC_Poly_ID 298136, Fraxinus pennsylvanica - Green ash
+# x1 <- 550
+# x2 <- 570
+# y1 <- 550
+# y2 <- 570
+# coords01 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)  # Define polygon coordinates
 
-# PC_Poly_ID_2, TNC_Poly_ID 298129, Gleditsia triacanthos var. inermis - Thornless honeylocust
-x1 <- 660
-x2 <- 680
-y1 <- 590
-y2 <- 610
-coords02 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_2, TNC_Poly_ID 298129, Gleditsia triacanthos var. inermis - Thornless honeylocust
+# x1 <- 660
+# x2 <- 680
+# y1 <- 590
+# y2 <- 610
+# coords02 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_3, TNC_Poly_ID 298202, Platanus x acerifolia - London planetree
 x1 <- 510
@@ -64,19 +37,19 @@ y1 <- 310
 y2 <- 330
 coords03 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_4, TNC_Poly_ID 298203, Acer platanoides - Norway maple
-x1 <- 680
-x2 <- 700
-y1 <- 350
-y2 <- 370
-coords04 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_4, TNC_Poly_ID 298203, Acer platanoides - Norway maple
+# x1 <- 680
+# x2 <- 700
+# y1 <- 350
+# y2 <- 370
+# coords04 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_5, TNC_Poly_ID 298196, Prunus serotina - black cherry
-x1 <- 270
-x2 <- 290
-y1 <- 340
-y2 <- 360
-coords05 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_5, TNC_Poly_ID 298196, Prunus serotina - black cherry
+# x1 <- 270
+# x2 <- 290
+# y1 <- 340
+# y2 <- 360
+# coords05 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_6, TNC_Poly_ID 298165, Acer saccharinum - silver maple
 x1 <- 780
@@ -85,19 +58,19 @@ y1 <- 530
 y2 <- 550
 coords06 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_7, TNC_Poly_ID 298214, Quercus palustris - pin oak
-x1 <- 790
-x2 <- 810
-y1 <- 240
-y2 <- 260
-coords07 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_7, TNC_Poly_ID 298214, Quercus palustris - pin oak
+# x1 <- 790
+# x2 <- 810
+# y1 <- 240
+# y2 <- 260
+# coords07 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_8, TNC_Poly_ID 298206, Fraxinus pennsylvanica - Green ash
-x1 <- 1090
-x2 <- 1110
-y1 <- 400
-y2 <- 420
-coords08 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_8, TNC_Poly_ID 298206, Fraxinus pennsylvanica - Green ash
+# x1 <- 1090
+# x2 <- 1110
+# y1 <- 400
+# y2 <- 420
+# coords08 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_9, TNC_Poly_ID 298208, Quercus ellipsoidalis - northern pin oak
 x1 <- 1180
@@ -113,11 +86,11 @@ y1 <- 600
 y2 <- 610
 coords10 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_11, TNC_Poly_ID 298131, Quercus acutissima - sawtooth oak
-x1 <- 90
-x2 <- 100
-y1 <- 575
-y2 <- 585
+# # PC_Poly_ID_11, TNC_Poly_ID 298131, Quercus acutissima - sawtooth oak
+x1 <- 95
+x2 <- 105
+y1 <- 565
+y2 <- 575
 coords11 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_12, TNC_Poly_ID 298128, Platanus x acerifolia - London planetree
@@ -127,39 +100,43 @@ y1 <- 620
 y2 <- 640
 coords12 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_13, TNC_Poly_ID 298217, Ulmus americana - American elm
-x1 <- 970
-x2 <- 990
-y1 <- 160
-y2 <- 180
-coords13 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_13, TNC_Poly_ID 298217, Ulmus americana - American elm
+# x1 <- 970
+# x2 <- 990
+# y1 <- 160
+# y2 <- 180
+# coords13 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_14, TNC_Poly_ID 298213, Quercus palustris - pin oak
-x1 <- 1080
-x2 <- 1100
-y1 <- 310
-y2 <- 330
-coords14 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_14, TNC_Poly_ID 298213, Quercus palustris - pin oak
+# x1 <- 1080
+# x2 <- 1100
+# y1 <- 310
+# y2 <- 330
+# coords14 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_15, TNC_Poly_ID 298164, Zelkova serrata - Japanese zelkova
-x1 <- 240
-x2 <- 260
-y1 <- 410
-y2 <- 430
-coords15 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_15, TNC_Poly_ID 298164, Zelkova serrata - Japanese zelkova
+# x1 <- 240
+# x2 <- 260
+# y1 <- 410
+# y2 <- 430
+# coords15 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_16, TNC_Poly_ID 298133, Liriodendron tulipifera - tuliptree
-x1 <- 130
-x2 <- 150
-y1 <- 545
-y2 <- 565
-coords16 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_16, TNC_Poly_ID 298133, Liriodendron tulipifera - tuliptree
+# x1 <- 130
+# x2 <- 150
+# y1 <- 545
+# y2 <- 565
+# coords16 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_17, TNC_Poly_ID 298195, Platanus x acerifolia - London planetree
-x1 <- 1040
-x2 <- 1060
-y1 <- 470
-y2 <- 490
+# x1 <- 1040
+# x2 <- 1060
+# y1 <- 470
+# y2 <- 490
+x1 <- 1020
+x2 <- 1040
+y1 <- 490
+y2 <- 510
 coords17 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_18, TNC_Poly_ID 297189, Platanus x acerifolia - London planetree
@@ -169,12 +146,13 @@ y1 <- 610
 y2 <- 630
 coords18 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_19, TNC_Poly_ID 298175, Platanus x acerifolia - London planetree
-x1 <- 50
-x2 <- 70
-y1 <- 420
-y2 <- 440
-coords19 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# this was the wrong tree
+# # PC_Poly_ID_19, TNC_Poly_ID 298175, Platanus x acerifolia - London planetree
+# x1 <- 50
+# x2 <- 70
+# y1 <- 420
+# y2 <- 440
+# coords19 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
 # PC_Poly_ID_20 298163, Tilia cordata - littleleaf linden
 x1 <- 960
@@ -197,64 +175,95 @@ y1 <- 700
 y2 <- 710
 coords22 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_23 298204, Quercus ellipsoidalis - northern pin oak
-x1 <- 960
-x2 <- 980
-y1 <- 370
-y2 <- 390
-coords23 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_23 298204, Quercus ellipsoidalis - northern pin oak
+# x1 <- 960
+# x2 <- 980
+# y1 <- 370
+# y2 <- 390
+# coords23 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_24 298150, Acer saccharinum - silver maple
-x1 <- 270
-x2 <- 290
-y1 <- 490
-y2 <- 510
-coords24 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_24 298150, Acer saccharinum - silver maple
+# x1 <- 270
+# x2 <- 290
+# y1 <- 490
+# y2 <- 510
+# coords24 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-# PC_Poly_ID_25 298040,  Quercus palustris - pin oak
-x1 <- 460
-x2 <- 470
-y1 <- 730
-y2 <- 740
-coords25 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+# # PC_Poly_ID_25 298040,  Quercus palustris - pin oak
+# x1 <- 460
+# x2 <- 470
+# y1 <- 730
+# y2 <- 740
+# coords25 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
 
-polygon_sf <- st_sfc(st_polygon(list(coords01)),
-                     st_polygon(list(coords02)),
+# # PC_Poly_ID_26 297336, Platanus x acerifolia - London planetree
+x1 <- 855
+x2 <- 865
+y1 <- 660
+y2 <- 670
+coords26 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+
+# # PC_Poly_ID_27 298139, Platanus x acerifolia - London planetree
+x1 <- 15
+x2 <- 25
+y1 <- 530
+y2 <- 540
+coords27 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+
+# # PC_Poly_ID_28
+x1 <- 10
+x2 <- 30
+y1 <- 200
+y2 <- 220
+coords28 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+
+# # PC_Poly_ID_29
+x1 <- 560
+x2 <- 580
+y1 <- 10
+y2 <- 30
+coords29 <- matrix(c(x1,y1, x2,y1, x2,y2, x1,y2, x1,y1), ncol=2, byrow=TRUE)
+
+polygon_sf <- st_sfc(#st_polygon(list(coords01)),
+                     #st_polygon(list(coords02)),
                      st_polygon(list(coords03)),
-                     st_polygon(list(coords04)),
-                     st_polygon(list(coords05)),
+                     #st_polygon(list(coords04)),
+                     #st_polygon(list(coords05)),
                      st_polygon(list(coords06)),
-                     st_polygon(list(coords07)),
-                     st_polygon(list(coords08)),
+                     #st_polygon(list(coords07)),
+                     #st_polygon(list(coords08)),
                      st_polygon(list(coords09)),
                      st_polygon(list(coords10)),
                      st_polygon(list(coords11)),
                      st_polygon(list(coords12)),
-                     st_polygon(list(coords13)),
-                     st_polygon(list(coords14)),
-                     st_polygon(list(coords15)),
-                     st_polygon(list(coords16)),
+                     #st_polygon(list(coords13)),
+                     #st_polygon(list(coords14)),
+                     #st_polygon(list(coords15)),
+                     #st_polygon(list(coords16)),
                      st_polygon(list(coords17)),
                      st_polygon(list(coords18)),
-                     st_polygon(list(coords19)),
+                     #st_polygon(list(coords19)),
                      st_polygon(list(coords20)),
                      st_polygon(list(coords21)),
                      st_polygon(list(coords22)),
-                     st_polygon(list(coords23)),
-                     st_polygon(list(coords24)),
-                     st_polygon(list(coords25)))  # Convert to Simple Features (sf)
+                     #st_polygon(list(coords23)),
+                     #st_polygon(list(coords24)),
+                     #st_polygon(list(coords25)),  # Convert to Simple Features (sf)
+                     st_polygon(list(coords26)),
+                     st_polygon(list(coords27)),
+                     st_polygon(list(coords28)),
+                     st_polygon(list(coords29)))  # Convert to Simple Features (sf)
+
+polygon_sf <- st_as_sf(polygon_sf)
+polygon_sf$poly_id <- as.character(c(3, 6, 9, 10, 11, 12, 17, 18, 20, 21, 22, 26, 27, 28, 29))
 
 plot(img_flipped)
-plot(polygon_sf, border = "green", lab = seq(1,25), lwd = 2, add = TRUE)
-text(st_coordinates(st_centroid(polygon_sf)), labels = as.character(seq(1,25)), cex = 1, col = "white")
+plot(polygon_sf, border = "green", fill = NA, lwd = 2, add = TRUE)
+text(st_coordinates(st_centroid(polygon_sf)), labels = polygon_sf$poly_id, cex = 1, col = "white")
 
 # 
 masked_img_flipped <- mask(img_flipped, vect(polygon_sf))  # Mask the raster with the polygon
 plot(masked_img_flipped)  # View the result
-# 
-# values_inside <- extract(img_flipped, vect(polygon_sf), fun = "mean")
-# values_inside <- exact_extract(img_flipped, polygon_sf, fun = "mean")
-# print(values_inside)
 
 getExposure <- function(img_file_list, i){
   meta_file <- paste0(unlist(strsplit(img_file_list[i], "\\."))[1], ".meta")
@@ -269,24 +278,24 @@ setwd("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_source/phenocamdata_RG
 img_file_list <- list.files(pattern = glob2rx("*.jpg"), recursive = TRUE)
 
 col_list <- c("PC_Poly_ID", "red", "green", "blue", "exposure","file")
-img_data_rgb <- data.frame(matrix(data = NA, nrow = length(img_file_list)*length(polygon_sf), ncol = length(col_list)))
+img_data_rgb <- data.frame(matrix(data = NA, nrow = length(img_file_list)*nrow(polygon_sf), ncol = length(col_list))) # needed to switch length of polygon_sf to nrow
 colnames(img_data_rgb) <- col_list
 
 #img_data_rgb$PC_Poly_ID <- 1 # will update for multiple polygons
 
 row_start <- 1
-row_end <- length(polygon_sf)
+row_end <- nrow(polygon_sf)
 
 for(i in 1:length(img_file_list)){
   print(i)
   img <- rast(img_file_list[i])
   img_flipped <- flip(img, direction = "vertical")
-  img_data_rgb[row_start:row_end, 1] <- seq(1, length(polygon_sf))
-  img_data_rgb[row_start:row_end, 2:4] <- exact_extract(img_flipped, polygon_sf, fun = "mean")
+  #img_data_rgb[row_start:row_end, 1] <- seq(1, nrow(polygon_sf))
+  img_data_rgb[row_start:row_end, 1:4] <- exact_extract(img_flipped, polygon_sf, fun = "mean", append_cols = "poly_id")
   img_data_rgb$file[row_start:row_end] <- unlist(strsplit(img_file_list[i], "/"))[4]
   img_data_rgb$exposure[row_start:row_end] <- getExposure(img_file_list, i)
-  row_start <- row_start + length(polygon_sf)
-  row_end <- row_end + length(polygon_sf)
+  row_start <- row_start + nrow(polygon_sf)
+  row_end <- row_end + nrow(polygon_sf)
 }
 
 #img_data_rgb$gcc <- img_data_rgb$green / (img_data_rgb$red + img_data_rgb$green + img_data_rgb$blue)
@@ -296,22 +305,22 @@ setwd("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_source/phenocamdata_IR
 img_file_list <- list.files(pattern = glob2rx("*.jpg"), recursive = TRUE)
 
 col_list <- c("PC_Poly_ID", "cnir_mono", "exposure", "file")
-img_data_ir <- data.frame(matrix(data = NA, nrow = length(img_file_list)*length(polygon_sf), ncol = length(col_list)))
+img_data_ir <- data.frame(matrix(data = NA, nrow = length(img_file_list)*nrow(polygon_sf), ncol = length(col_list)))
 colnames(img_data_ir) <- col_list
 
 row_start <- 1
-row_end <- length(polygon_sf)
+row_end <- nrow(polygon_sf)
 
 for(i in 1:length(img_file_list)){
   print(i)
   img <- rast(img_file_list[i])
   img_flipped <- flip(img, direction = "vertical")
-  img_data_ir[row_start:row_end, 1] <- seq(1, length(polygon_sf))
-  img_data_ir[row_start:row_end, 2] <- exact_extract(img_flipped, polygon_sf, fun = "mean")
+  #img_data_ir[row_start:row_end, 1] <- seq(1, length(polygon_sf))
+  img_data_ir[row_start:row_end, 1:2] <- exact_extract(img_flipped, polygon_sf, fun = "mean", append_cols = "poly_id")
   img_data_ir$file[row_start:row_end] <- unlist(strsplit(img_file_list[i], "/"))[4]
   img_data_ir$exposure[row_start:row_end] <- getExposure(img_file_list, i)
-  row_start <- row_start + length(polygon_sf)
-  row_end <- row_end + length(polygon_sf)
+  row_start <- row_start + nrow(polygon_sf)
+  row_end <- row_end + nrow(polygon_sf)
 }
 
 # NEED to merge by date time, some might be missing between the two
@@ -359,6 +368,7 @@ Z_p_dn <- Zdn / sqrt(Ez) # exposure adjusted rgb+ir
 R_p_dn <- Rdn / sqrt(Ey) # exposure adjusted red
 Y_p_dn <- Ydn / sqrt(Ey) # exposure adjusted rgb (visible sum)
 X_p_dn <- Z_p_dn - Y_p_dn # exposure adjusted nir only
+X_p_dn[X_p_dn < 0] <- NA # remove any adjusted NIR that are lower than possible from total
 NDVIc <- (X_p_dn - R_p_dn)/(X_p_dn + R_p_dn)
 
 img_data_merged$NDVIc <- NDVIc
@@ -382,11 +392,6 @@ ggplot(img_data_merged_bf, aes(x = datetime, y = NDVIc)) +
   #geom_smooth(aes(col = as.factor(PC_Poly_ID))) +
   facet_wrap(~as.factor(PC_Poly_ID), ncol = 5) +
   theme_bw()
-
-###
-# For each point, do 3 day smoothing
-# Sonnentag et al 2012 does a 90th percentile on all daytime values
-# Richardson et al 2018 suggests trying 75th and 50th too
 
 # time range to get data
 daterange <- interval(ymd_hms("20220101 00:00:01"), ymd_hms("20221231 23:59:59"))
@@ -432,13 +437,13 @@ df_smoothed_dates$date <- ymd("20220101") + days(df_smoothed_dates$doy - 1)
 df_smoothed_dates$gcc <- df_smoothed_dates$gcc90
 df_smoothed_dates$NDVIc <- df_smoothed_dates$NDVIc90
 
-ggplot(img_data_merged_bf %>% filter(PC_Poly_ID == 4), aes(x = as.Date(datetime), y = gcc)) +
+ggplot(img_data_merged_bf %>% filter(PC_Poly_ID == 6), aes(x = as.Date(datetime), y = gcc)) +
   geom_point(alpha = 0.5, col = "red") +
-  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 4),
-             aes(x = date, y = gcc90), col = "black") +
-  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 4),
+  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 6),
+            aes(x = date, y = gcc90), col = "black") +
+  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 6),
             aes(x = date, y = gcc75), col = "gray30") +
-  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 4),
+  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 6),
             aes(x = date, y = gcc50), col = "gray60") +
   theme_bw()
 
@@ -448,9 +453,9 @@ ggplot(df_smoothed_dates) +
 
 #
 
-ggplot(img_data_merged_bf %>% filter(PC_Poly_ID == 3), aes(x = as.Date(datetime), y = NDVIc)) +
+ggplot(img_data_merged_bf %>% filter(PC_Poly_ID == 6), aes(x = as.Date(datetime), y = NDVIc)) +
   geom_point(alpha = 0.5, col = "red") +
-  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 3),
+  geom_line(data = df_smoothed_dates %>% filter(poly_ids == 6),
             aes(x = date, y = NDVIc)) +
   theme_bw()
 
@@ -460,13 +465,7 @@ ggplot(df_smoothed_dates) +
 
 
 #####
-# if necessary
-# fill in Jan 1 with Jan 2, and fill in Dec 31 with Dec 30
 
-# Use phenofit (or phenopix) to do Elmore double logistic and get SOS and EOS for these tree time series for GCC and for NDVIc
-
-# modified from test_phenofit_v3.R
-# USE THIS
 
 setupPhenoElmoreModGcc <- function(tree_ts_df_complete, year_val){
   # make sure the labeling of the "date" column is formatted correctly
@@ -492,7 +491,7 @@ setupPhenoElmoreModNDVIc <- function(tree_ts_df_complete, year_val){
 
 runPhenoElmoreModGcc <- function(df_tree){
   fits <- list('2022' = setupPhenoElmoreModGcc(df_tree, 2022))
-
+  
   l_pheno   <- get_pheno(fits, method = "Elmore", TRS = c(0.5), asymmetric = TRUE)
   
   l_pheno_sub <- l_pheno$date$Elmore[,c("flag", "origin", "TRS5.sos", "TRS5.eos")]
@@ -509,7 +508,7 @@ runPhenoElmoreModGcc <- function(df_tree){
 
 runPhenoElmoreModNDVIc <- function(df_tree){
   fits <- list('2022' = setupPhenoElmoreModNDVIc(df_tree, 2022))
-
+  
   l_pheno   <- get_pheno(fits, method = "Elmore", TRS = c(0.5), asymmetric = TRUE)
   
   l_pheno_sub <- l_pheno$date$Elmore[,c("flag", "origin", "TRS5.sos", "TRS5.eos")]
@@ -525,14 +524,14 @@ runPhenoElmoreModNDVIc <- function(df_tree){
 }
 
 # Visualize fits
-for (i in 1:25){
+for (i in as.numeric(unq_polys)){
   df_1tree <- df_smoothed_dates %>% filter(poly_ids == i)
   fits <- list('2022' = setupPhenoElmoreModNDVIc(df_1tree, 2022))
   get_pheno(fits, method = "Elmore", TRS = c(0.5), asymmetric = TRUE, IsPlot = TRUE)
 }
 # Does OK for NDVIc once shifted
 
-for (i in 1:25){
+for (i in as.numeric(unq_polys)){
   df_1tree <- df_smoothed_dates %>% filter(poly_ids == i)
   fits <- list('2022' = setupPhenoElmoreModGcc(df_1tree, 2022))
   get_pheno(fits, method = "Elmore", TRS = c(0.5), asymmetric = TRUE, IsPlot = TRUE)
@@ -544,26 +543,27 @@ for (i in 1:25){
 #pheno_output_1tree <- runPhenoElmoreModNDVIc(df_1tree)
 
 # run for NDVIc
-for (i in 1:25){
+loop_num <- 1
+for (i in as.numeric(unq_polys)){
   df_1tree <- df_smoothed_dates %>% filter(poly_ids == i)
   pheno_output <- runPhenoElmoreModNDVIc(df_1tree)
-  if (i == 1){
+  if (loop_num == 1){
     pheno_output_all <- pheno_output
   } else {
     pheno_output_all <- rbind.data.frame(pheno_output_all, pheno_output)
   }
+  loop_num <- loop_num + 1
 }
 
 colnames(pheno_output_all)[1] <- "Year"
 colnames(pheno_output_all) <- paste0("PhenoCam_", colnames(pheno_output_all))
 
-# Get TNC_Poly_ID values from reference csv file
-# Retrieve SOS and EOS for point based method from PlanetScope extracted data
-
-phenocam_tree_info <- read.csv("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_pheno_tree_poly_list.csv")
+# merge in planetscope data
+phenocam_tree_info <- read.csv("/Users/dlm356/dlm356_files/nyc_trees/phenocam/cuny_pheno_tree_poly_list_new.csv") # updated csv
 planetscope_tree_pheno1 <- read.csv("/Volumes/NYC_geo/Planet/tests/nyc_daily_stack_highsunonly_cal_pheno/trees_pheno_output_objset1_297001_298000_point.csv")
 planetscope_tree_pheno2 <- read.csv("/Volumes/NYC_geo/Planet/tests/nyc_daily_stack_highsunonly_cal_pheno/trees_pheno_output_objset1_298001_299000_point.csv")
-planetscope_tree_pheno <- rbind.data.frame(planetscope_tree_pheno1, planetscope_tree_pheno2)
+planetscope_tree_pheno3 <- read.csv("/Volumes/NYC_geo/Planet/tests/nyc_daily_stack_highsunonly_cal_pheno/trees_pheno_output_objset1_296001_297000_point.csv")
+planetscope_tree_pheno <- rbind.data.frame(planetscope_tree_pheno1, planetscope_tree_pheno2, planetscope_tree_pheno3)
 
 planetscope_tree_pheno_sub <- planetscope_tree_pheno[which(planetscope_tree_pheno$Object_ID %in% phenocam_tree_info$TNC_Poly_ID),]
 planetscope_tree_pheno_sub <- planetscope_tree_pheno_sub %>% filter(Year == 2022)
@@ -576,8 +576,7 @@ colnames(planetscope_tree_pheno_sub ) <- paste0("PlanetScope_", colnames(planets
 pcps_merge <- merge(phenocam_tree_info, pheno_output_all, by.x = "PC_Poly_ID", by.y = "PhenoCam_poly_ids")
 pcps_merge <- merge(pcps_merge, planetscope_tree_pheno_sub, by.x = "TNC_Poly_ID", by.y = "PlanetScope_Object_ID")
 
-pcps_merge %>% filter(PC_Poly_ID %in% c(18, 10, 9, 21, 20, 22, 12)) %>%
-ggplot() +
+ggplot(pcps_merge) +
   geom_point(aes(x = PlanetScope_SOS_50, y = PhenoCam_SOS_50, col = Species), size = 2) +
   geom_smooth(aes(x = PlanetScope_SOS_50, y = PhenoCam_SOS_50), method = "lm") +
   geom_abline(slope = 1, intercept = 0) +
@@ -585,8 +584,8 @@ ggplot() +
   coord_equal()
 
 summary(lm(pcps_merge$PhenoCam_SOS_50 ~ pcps_merge$PlanetScope_SOS_50))
-pcps_merge_sub <- pcps_merge %>% filter(PC_Poly_ID %in% c(18, 10, 9, 21, 20, 22, 12))
-summary(lm(pcps_merge_sub$PhenoCam_SOS_50 ~ pcps_merge_sub$PlanetScope_SOS_50))
+mean(pcps_merge$PlanetScope_SOS_50 - pcps_merge$PhenoCam_SOS_50)
+sd(pcps_merge$PlanetScope_SOS_50 - pcps_merge$PhenoCam_SOS_50)
 
 
 ggplot(pcps_merge) +
@@ -600,110 +599,3 @@ summary(lm(pcps_merge$PhenoCam_EOS_50 ~ pcps_merge$PlanetScope_EOS_50))
 
 mean(pcps_merge$PlanetScope_SOS_50 - pcps_merge$PhenoCam_SOS_50)
 mean(pcps_merge$PlanetScope_EOS_50 - pcps_merge$PhenoCam_EOS_50)
-
-#####
-# Getting phenodates from gcc (and NDVIc?) from LOESS smoother?
-
-# Need to check span but this number seems pretty good?
-
-ggplot(df_smoothed_dates) +
-  geom_line(aes(x = date, y = gcc, col = poly_ids)) +
-  geom_smooth(aes(x = date, y = gcc), method = "loess", span = 0.14, se = FALSE, color = "red") +
-  facet_wrap(~as.factor(poly_ids))
-
-df_smoothed_dates_gcc_sub <- df_smoothed_dates[,c("date", "poly_ids", "gcc")]
-
-loess_results <- df_smoothed_dates_gcc_sub %>%
-  group_by(poly_ids) %>%
-  arrange(date) %>%
-  mutate(
-    x_num = as.numeric(date),
-    fit = as.numeric(predict(loess(gcc ~ x_num, span = 0.14), newdata = data.frame(x_num = x_num))),
-    se = as.numeric(predict(loess(gcc ~ x_num, span = 0.14), newdata = data.frame(x_num = x_num), se = TRUE)$se.fit),
-    upper = fit + 1.96 * se,
-    lower = fit - 1.96 * se
-  )
-
-ggplot(loess_results, aes(date, gcc, color = as.factor(poly_ids))) +
-  geom_line(alpha = 0.3) +
-  geom_line(aes(y = fit), linewidth = 1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill = as.factor(poly_ids)), alpha = 0.2, color = NA) +
-  facet_wrap(~as.factor(poly_ids))
-  theme_minimal() +
-  labs(title = "Grouped Time Series with LOESS Smoothing",
-       x = "Date", y = "Value") #+
-  #scale_color_brewer(palette = "Set1") +
-  #scale_fill_brewer(palette = "Set1")
-
-loess_results_cc <- loess_results[complete.cases(loess_results),]
-  
-result <- loess_results_cc %>%
-  group_by(poly_ids) %>%
-  arrange(date) %>%
-  mutate(row_id = row_number()) %>%
-  summarise({
-    max_row <- which.max(fit)
-    max_val <- fit[max_row]
-    max_date <- date[max_row]
-    
-    # Restrict to only values before max_row (inclusive if needed)
-    before_max_values <- fit[1:max_row]
-    before_max_dates <- date[1:max_row]
-    
-    # Min before max
-    min_val <- min(before_max_values)
-    min_row <- which(before_max_values == min_val)[1]
-    min_date <- before_max_dates[min_row]
-    
-    # Midpoint value
-    mid_val <- (min_val + max_val) / 2
-    
-    # Find closest to midpoint only among values BEFORE max
-    abs_diff <- abs(before_max_values - mid_val)
-    mid_row <- which.min(abs_diff)
-    mid_date <- before_max_dates[mid_row]
-    actual_mid_value <- before_max_values[mid_row]
-    
-    tibble(
-      max_value = max_val,
-      max_date = max_date,
-      min_before_max = min_val,
-      min_date = min_date,
-      midpoint_target = mid_val,
-      closest_to_mid_date = mid_date,
-      actual_mid_value = actual_mid_value
-    )
-  })
-
-
-pcps_merge2 <- merge(pcps_merge, result, by.x = "PC_Poly_ID", by.y = "poly_ids")
-pcps_merge2$PhenoCam_GCC_SOS_50 <- yday(pcps_merge2$closest_to_mid_date)
-  
-ggplot(pcps_merge2) +
-  geom_point(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50, col = Species), size = 2) +
-  geom_smooth(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50), method = "lm") +
-  geom_abline(slope = 1, intercept = 0) +
-  geom_text(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50, label = as.character(PC_Poly_ID))) +
-  coord_equal()
-
-summary(lm(pcps_merge2$PhenoCam_GCC_SOS_50 ~ pcps_merge2$PlanetScope_SOS_50))
-
-ggplot(pcps_merge2) +
-  geom_point(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50), col = "red", size = 2) +
-  geom_point(aes(x = PlanetScope_SOS_50, y = PhenoCam_SOS_50), col = "blue", size = 2) +
-  #geom_point(aes(x = PlanetScope_EOS_50, y = PhenoCam_EOS_50), col = "forestgreen", size = 2) +
-  geom_smooth(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50), col = "red", method = "lm") +
-  geom_smooth(aes(x = PlanetScope_SOS_50, y = PhenoCam_SOS_50), col = "blue", method = "lm") +
-  geom_abline(slope = 1, intercept = 0) +
-  #geom_text(aes(x = PlanetScope_SOS_50, y = PhenoCam_GCC_SOS_50, label = as.character(PC_Poly_ID))) +
-  coord_equal()
-
-pcps_merge2$PhenoCam_Mean_SOS_50 <- (pcps_merge2$PhenoCam_SOS_50 + pcps_merge2$PhenoCam_GCC_SOS_50)/2
-ggplot(pcps_merge2) +
-  geom_point(aes(x = PlanetScope_SOS_50, y = PhenoCam_Mean_SOS_50, col = Species), size = 2) +
-  geom_smooth(aes(x = PlanetScope_SOS_50, y = PhenoCam_Mean_SOS_50), method = "lm") +
-  geom_abline(slope = 1, intercept = 0) +
-  geom_text(aes(x = PlanetScope_SOS_50, y = PhenoCam_Mean_SOS_50, label = as.character(PC_Poly_ID))) +
-  coord_equal()
-
-summary(lm(pcps_merge2$PhenoCam_Mean_SOS_50 ~ pcps_merge2$PlanetScope_SOS_50))
